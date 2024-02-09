@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  api:
+    image: maven:3.6.0-jdk-8
+    depends_on:
+      - mysql
+    user: ${UID}:${UID}
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /home/usrgmexp/ngnis:/ngnis
+      - /home/$USER/.m2:/root/.m2
+    ports:
+      - 32751:8080
+    command: ["mvn", "clean", "spring-boot:run", "-Dspring-boot.run.profiles=dev", "-Dmaven.repo.local=.m2"]
+  mysql:
+    image: 'mysql:5.6'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: garantia_core
+    ports:
+      - 3306:3306
